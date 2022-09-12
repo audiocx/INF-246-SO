@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <dirent.h>
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <stdlib.h>
 
+/*
+fileSorter: se le entrega una carpeta y archivo de origen, lee el archivo y lo mueve a la carpeta correspondiente dependiendo
+    de donde se deba ubicar
+*/
 void fileSorter(char *folder, char *fileName)
 {
     char filePath[128];
@@ -58,6 +62,9 @@ void fileSorter(char *folder, char *fileName)
     system(call);
 }
 
+/*
+dirReader: lee el directorio donde se encuentran los archivos de los alumnos ejecutando fileSorter a cada uno
+*/
 void dirReader(char *folder)
 {
     struct dirent *entry;
@@ -88,9 +95,37 @@ void dirReader(char *folder)
     }
 }
 
+
+/*
+makeDirs: crea los directorios donde se moveran los archivos correspondientes
+*/
+void makeDirs()
+{
+    mkdir("2019", 0777);
+    mkdir("2019/3000+", 0777);
+    mkdir("2019/6000+", 0777);
+    mkdir("2019/9000+", 0777);
+
+    mkdir("2020", 0777);
+    mkdir("2020/3000+", 0777);
+    mkdir("2020/6000+", 0777);
+    mkdir("2020/9000+", 0777);
+
+    mkdir("2021", 0777);
+    mkdir("2021/3000+", 0777);
+    mkdir("2021/6000+", 0777);
+    mkdir("2021/9000+", 0777);
+}
+
+
+/*
+main: ejecuta las operaciones para el orden de archivos
+*/
 int main()
 {
-    char folder[] = "Archivos de prueba";
+    char folder[] = "Archivos"; //Cambiar nombre en caso de ser necesario (solo nombre con caracteres contiguos)
+    
+    makeDirs();
     dirReader(folder);
     return 0;
 }

@@ -2,10 +2,14 @@
 #include <string.h>
 #include <dirent.h>
 
+// Variables globales para conteo del total
 int total_prio_3000 = 0;
 int total_prio_6000 = 0;
 int total_prio_9000 = 0;
 
+/*
+viewDataFolder: se le entrega el anno y nombre de carpeta, para luego revisar su contenido y entregar los resultados
+*/
 void viewDataFolder(int year, char *folder)
 {
     struct dirent *entry;
@@ -84,6 +88,10 @@ void viewDataFolder(int year, char *folder)
     printf("    La cantidad de estudiantes de %i con prioridad 9000+ son: %i\n", year, prio_9000);
 }
 
+
+/*
+main: ejecuta las operaciones para visualizacion de datos
+*/
 int main()
 {
     char f_2019[] = "./2019";

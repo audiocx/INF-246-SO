@@ -1,0 +1,20 @@
+Nombre: Claudio Inal
+ROL: 201873060-2
+Paralelo: 200
+
+Especificación de archivos:
+	* ordenArchivos.c
+	* visualizacionDatos.c
+	* Makefile
+	* README.txt
+
+Instrucciones:
+	* Abrir terminal en la carpeta que contiene los archivos .c.
+	* Para compilar ejecute "make orden" y luego "make visual" para compilar la parte de
+	ordenamiento y visualizacion respectivamente.
+	* IMPORTANTE: antes de utilizar el programa asegurese de que el nombre de la carpeta 	donde se incluyen los archivos a ser testeados sea con caracteres contiguos. Por defecto
+	el nombre de esta carpeta es "Archivos", la cual puede ser cambiada en el main del
+	archivo ordenArchivos.c.
+	* En la terminal ejecute "./orden" para ordenar los archivos.
+	* En la terminal ejecute "./visual" para ver las estadísticas.
+	* Para finalizar puede ejecutar "make clean" para eliminar lo compilado.
