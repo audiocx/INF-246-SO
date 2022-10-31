@@ -11,7 +11,12 @@
 #define WRITE 1
 
 typedef int Pipe;
-typedef int mensaje;
+
+typedef struct Mensajes
+{
+    int interruptor;
+    int ganador;
+} mensaje;
 
 Pipe *pipesXP[4];
 Pipe *pipesPX[4];

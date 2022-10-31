@@ -11,3 +11,6 @@ Instrucciones:
 	-Ejecute "make all" para compilar y ejecutar el programa
 	-Juegue según se indican en las instrucciones dentro del mismo juego
 	-Una vez terminado ejecute "make clean" para eliminar los archivos compilados
+
+Observaciones:
+	-La última pieza agregada se muestra de color amarillo en la mesa

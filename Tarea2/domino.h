@@ -28,7 +28,7 @@ int initManos(mano *h0, mano *h1, mano *h2, mano *h3);
 void sacarDeMano(mano *h, int d);
 void printMano(mano h);
 void printManoSimple(mano h);
-void printMesa(mesa t);
+void printMesa(mesa t, int lado_ult_mov);
 int insertarDmn(mesa *t, dmn d, char p);
 void swapDmn(dmn *d);
 int hayGanador(mano h0, mano h1, mano h2, mano h3, int saltos);

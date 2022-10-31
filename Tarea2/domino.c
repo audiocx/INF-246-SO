@@ -1,5 +1,10 @@
 #include "domino.h"
 
+#define KYEL "\x1B[33m"
+#define KPURPLE "\x1b[35m"
+#define KCYAN "\x1b[36m"
+#define KRESET "\x1b[0m"
+
 /*
 Nombre: initMesa
 Descripcion: inicializa la mesa en 0
@@ -107,12 +112,12 @@ Output: nada
 void printMano(mano h)
 {
     for (int i = 0; i < h.size; i++)
-        printf("[%i|%i]", h.h[i].L, h.h[i].R);
-    printf("[saltar]");
-    printf("\n");
+        printf("%s[%i|%i]", KPURPLE, h.h[i].L, h.h[i].R);
+    printf("[saltar]%s", KRESET);
+    printf("\n%s", KCYAN);
     for (int i = 0; i < h.size; i++)
         printf(" <%i> ", i + 1);
-    printf("  <0>  \n");
+    printf("  <0>  \n%s", KRESET);
 }
 
 /*
@@ -139,24 +144,35 @@ Output: 1 si se inserto exitosamente, 0 en otro caso
  */
 int insertarDmn(mesa *t, dmn d, char p)
 {
+    if (t->size == 0)
+    {
+        t->m[0].L = d.L;
+        t->m[0].R = d.R;
+        t->size++;
+        return 1; // insercion exitosa
+    }
     if (t->size < 28)
     {
-        if (p == 'L')
+        if (p == 'L' && d.R == t->m[0].L)
         {
             for (int i = t->size; i >= 1; i--)
                 t->m[i] = t->m[i - 1];
             t->m[0].L = d.L;
             t->m[0].R = d.R;
         }
-        else if (p == 'R')
+        else if (p == 'R' && d.L == t->m[t->size - 1].R)
         {
             t->m[t->size].L = d.L;
             t->m[t->size].R = d.R;
         }
+        else
+        {
+            printf("¡Movimiento invalido!, el domino no fue agregado\n");
+            return 0;
+        }
         t->size++;
         return 1; // insercion exitosa
     }
-    printf("no se pudo meter el domino\n");
     return 0; // insercion fallida
 }
 
@@ -181,11 +197,19 @@ Inputs:
     - mesa t: mesa a printear
 Output: nada
  */
-void printMesa(mesa t)
+void printMesa(mesa t, int lado_ult_mov)
 {
     printf("Mesa: ");
     for (int i = 0; i < t.size; i++)
-        printf("[%i|%i]", t.m[i].L, t.m[i].R);
+    {
+        if (lado_ult_mov == 1 && i == 0)
+            printf("%s[%i|%i]%s", KYEL, t.m[i].L, t.m[i].R, KRESET);
+        else if (lado_ult_mov == 2 && i == t.size - 1)
+            printf("%s[%i|%i]%s", KYEL, t.m[i].L, t.m[i].R, KRESET);
+        else
+            printf("[%i|%i]", t.m[i].L, t.m[i].R);
+    }
+
     printf("\n");
 }
 
@@ -244,7 +268,7 @@ Descripcion: genera un movimiento posible del bot
 Inputs:
     - mesa *t: mesa donde se hara el movimiento
     - mano *h: mano donde se hara el movimiento
-Output: numero que indica si se pudo realizar el movimiento
+Output: el lado donde se hizo la insercion del domino, 0: falla, 1: izquierda, 2: derecha
  */
 int movDummy(mesa *t, mano *h)
 {
@@ -290,14 +314,14 @@ int movDummy(mesa *t, mano *h)
         {
             insertarDmn(t, h->h[i], 'R');
             sacarDeMano(h, i);
-            return 1;
+            return 2;
         }
         if (extR == h->h[i].R) // ext: ...[a|b] dmn: [c|b]
         {
             swapDmn(&h->h[i]);
             insertarDmn(t, h->h[i], 'R');
             sacarDeMano(h, i);
-            return 1;
+            return 2;
         }
     }
 
