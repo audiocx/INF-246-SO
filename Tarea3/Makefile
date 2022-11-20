@@ -4,5 +4,5 @@ all: comp
 comp: Hebra.java
 	javac Hebra.java
 
-clear:
+clean:
 	rm -r Hebra.class

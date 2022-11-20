@@ -11,6 +11,7 @@ public class Hebra implements Runnable{
     int row_t, row_b; // row top, row bottom: delimitan el espacio de busqueda en las filas
     int col_l, col_r; // column left, column right: delimitan el espacio de busqueda en las columnas
     int M; // tamano de la embarcacion
+    long finishedTime;
 
     public Hebra(int row_t, int row_b, int col_l, int col_r, int M, int matriz[][])
     {
@@ -20,6 +21,13 @@ public class Hebra implements Runnable{
         this.col_r = col_r;
         this.M = M;
         this.matriz = matriz;
+
+        this.finishedTime = -1;
+    }
+
+    public long getFinishedTime()
+    {
+        return finishedTime;
     }
 
     /*
@@ -66,6 +74,16 @@ public class Hebra implements Runnable{
                 System.out.println("Error en la hebra!");
                 System.out.println(e);
             }
+
+            // Obtenemos el tiempo que le tomo encontrar a la embarcacion a la hebra responsable
+            if(c1.getFinishedTime() != -1)
+                this.finishedTime = c1.getFinishedTime();
+            if(c2.getFinishedTime() != -1)
+                this.finishedTime = c2.getFinishedTime();
+            if(c3.getFinishedTime() != -1)
+                this.finishedTime = c3.getFinishedTime();
+            if(c4.getFinishedTime() != -1)
+                this.finishedTime = c4.getFinishedTime();
         }
         // Si la dimension de la submatriz corresponde al largo de la embarcacion, chequeamos si el barco esta ahi
         else
@@ -86,6 +104,7 @@ public class Hebra implements Runnable{
             if(matriz[i][col_l] == 1)
             {
                 System.out.println("fila " + (i + 1) + ", columna " + (col_l + 1));
+                this.finishedTime = System.nanoTime();
                 return;
             }
         }
@@ -106,6 +125,25 @@ public class Hebra implements Runnable{
         }
     }
 
+    public void fuerzaBruta()
+    {
+        int size = this.col_r + 1;
+        long start = System.nanoTime();
+        long finish;
+        for(int i = 0; i < size; i ++)
+        {
+            for(int j = 0; j < size; j++)
+            {
+                if(matriz[i][j] == 1)
+                {
+                    finish = System.nanoTime();
+                    System.out.println("Fuerza bruta: " + (finish - start) + " nanosegundos");
+                    break;
+                }
+            }
+        }
+    }
+
     /*
      * main: abre el archivo a analizar, transforma los datos segun sea conveniente, y
      * crea la clase junto a la hebra para ejecutar y analizar el informe nautico
@@ -114,8 +152,10 @@ public class Hebra implements Runnable{
     {
         // Creamos una lista en donde guardaremos las lineas leidas
         List<String> data = Collections.emptyList();
+
+        // Nombre del archivo de texto a cargar
+        String nombre = "informe-nautico.txt";
         try {
-            String nombre = "informe-nautico.txt";
             data = Files.readAllLines(Paths.get(nombre), StandardCharsets.UTF_8); // leemos las lineas
         } catch (IOException e){
             System.out.println("Error abriendo archivo de prueba!");
@@ -135,15 +175,20 @@ public class Hebra implements Runnable{
 
         Hebra hbr = new Hebra(0, N - 1, 0, N - 1, M, matriz); // creamos un objeto hebra
 
+        
         Thread thr = new Thread(hbr); // creamos la hebra del objeto
         try
         {
+            long startTime = System.nanoTime();
             thr.start(); // ejecutamos la hebra
             thr.join(); // esperamos a que termine
+            long finishedTime = hbr.getFinishedTime();
+            System.out.println("Hebras: " + (finishedTime - startTime) + " nanosegundos");
         } catch (Exception e)
         {
             System.out.println("Error en la hebra!");
         }
-
+        
+        hbr.fuerzaBruta(); // Resolvemos por fuerza bruta
     }
 }
